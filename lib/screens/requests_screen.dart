@@ -36,7 +36,12 @@ class RequestsScreen extends StatelessWidget {
             hintText: 'Search PR number or department...',
             prefixIcon: const Icon(Icons.search),
             suffixIcon: IconButton(
-              onPressed: () {},
+              tooltip: 'Filter requests',
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Filter request dibuka')),
+                );
+              },
               icon: const Icon(Icons.tune),
             ),
           ),

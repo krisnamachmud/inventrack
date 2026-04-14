@@ -1,17 +1,28 @@
 # iven_track
 
-A new Flutter project.
+InvenTrack adalah aplikasi Flutter yang ditargetkan khusus untuk Android.
 
-## Getting Started
+## Menjalankan aplikasi (Android)
 
-This project is a starting point for a Flutter application.
+1. Pastikan Android SDK dan device/emulator Android sudah tersedia.
+2. Install dependency:
 
-A few resources to get you started if this is your first Flutter project:
+```bash
+flutter pub get
+```
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+3. Jalankan aplikasi:
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```bash
+flutter run
+```
+
+## Build APK release
+
+```bash
+flutter build apk --release
+```
+
+Output APK berada di:
+
+`build/app/outputs/flutter-apk/app-release.apk`

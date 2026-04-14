@@ -16,4 +16,19 @@ void main() {
     expect(find.text('InvenTrack'), findsOneWidget);
     expect(find.text('Sign In to Dashboard'), findsOneWidget);
   });
+
+  testWidgets('Requests filter icon button works', (WidgetTester tester) async {
+    await tester.pumpWidget(const InvenTrackApp());
+
+    await tester.tap(find.text('Sign In to Dashboard'));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Requests'));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byTooltip('Filter requests'));
+    await tester.pump();
+
+    expect(find.text('Filter request dibuka'), findsOneWidget);
+  });
 }
