@@ -22,7 +22,7 @@ class DashboardScreen extends StatelessWidget {
         'color': Colors.amber,
       },
       {
-        'title': 'PR Approved',
+        'title': 'PR Processed',
         'value': '45',
         'icon': Icons.verified,
         'color': Colors.green,

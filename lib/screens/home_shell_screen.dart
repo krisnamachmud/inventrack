@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../app.dart';
 import '../theme/app_colors.dart';
-import 'approvals_screen.dart';
 import 'dashboard_screen.dart';
 import 'inventory_screen.dart';
+import 'overview_screen.dart';
 import 'requests_screen.dart';
 
 class HomeShellScreen extends StatefulWidget {
@@ -27,12 +27,11 @@ class _HomeShellScreenState extends State<HomeShellScreen> {
         },
       ),
       RequestsScreen(
-        onOpenApprovals: () => setState(() => _currentIndex = 2),
         onOpenPoTracking: () {
           Navigator.pushNamed(context, InvenTrackApp.poTrackingRoute);
         },
       ),
-      ApprovalsScreen(
+      OverviewScreen(
         onOpenAuditLog: () {
           Navigator.pushNamed(context, InvenTrackApp.auditLogRoute);
         },
@@ -87,7 +86,7 @@ class _HomeShellScreenState extends State<HomeShellScreen> {
           NavigationDestination(
             icon: Icon(Icons.fact_check_outlined),
             selectedIcon: Icon(Icons.fact_check),
-            label: 'Approvals',
+            label: 'Overview',
           ),
           NavigationDestination(
             icon: Icon(Icons.inventory_2_outlined),

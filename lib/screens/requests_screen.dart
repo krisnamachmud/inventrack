@@ -4,20 +4,18 @@ import '../theme/app_colors.dart';
 
 class RequestsScreen extends StatelessWidget {
   const RequestsScreen({
-    required this.onOpenApprovals,
     required this.onOpenPoTracking,
     super.key,
   });
 
-  final VoidCallback onOpenApprovals;
   final VoidCallback onOpenPoTracking;
 
   @override
   Widget build(BuildContext context) {
     final requests = [
       ('PR-2024-0892', 'Precision Milling Bits', 'Pending'),
-      ('PR-2024-0888', 'High-Grade Lubricant X-9', 'Approved'),
-      ('PR-2024-0875', 'Replacement Sensors S4', 'Rejected'),
+      ('PR-2024-0888', 'High-Grade Lubricant X-9', 'In Progress'),
+      ('PR-2024-0875', 'Replacement Sensors S4', 'Completed'),
       ('PR-2024-0870', 'Safety Equipment Refill', 'Draft'),
     ];
 
@@ -54,7 +52,6 @@ class RequestsScreen extends StatelessWidget {
               title: Text(item.$1),
               subtitle: Text(item.$2),
               trailing: Text(item.$3),
-              onTap: onOpenApprovals,
             ),
           ),
         ),
