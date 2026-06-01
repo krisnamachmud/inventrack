@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../app.dart';
-import '../theme/app_colors.dart';
 import 'approvals_screen.dart';
 import 'dashboard_screen.dart';
 import 'inventory_screen.dart';
@@ -49,27 +48,6 @@ class _HomeShellScreenState extends State<HomeShellScreen> {
 
     return Scaffold(
       body: SafeArea(child: tabs[_currentIndex]),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: AppColors.primary,
-        foregroundColor: Colors.white,
-        onPressed: () {
-          switch (_currentIndex) {
-            case 0:
-              setState(() => _currentIndex = 1);
-              break;
-            case 1:
-              Navigator.pushNamed(context, InvenTrackApp.poTrackingRoute);
-              break;
-            case 2:
-              Navigator.pushNamed(context, InvenTrackApp.auditLogRoute);
-              break;
-            case 3:
-              Navigator.pushNamed(context, InvenTrackApp.goodsReceiptRoute);
-              break;
-          }
-        },
-        child: const Icon(Icons.add),
-      ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _currentIndex,
         onDestinationSelected: (value) => setState(() => _currentIndex = value),
