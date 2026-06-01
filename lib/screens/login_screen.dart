@@ -2,9 +2,87 @@ import 'package:flutter/material.dart';
 
 import '../app.dart';
 import '../theme/app_colors.dart';
+import '../services/api_service.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  bool _isLoading = false;
+  bool _obscurePassword = true;
+  String? _errorMessage;
+
+  Future<void> _handleLogin() async {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text;
+
+    if (email.isEmpty || password.isEmpty) {
+      setState(() {
+        _errorMessage = 'Email dan password harus diisi.';
+      });
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
+
+    try {
+      final response = await ApiService.login(email, password);
+
+      if (!mounted) return;
+
+      final int statusCode = response['statusCode'];
+      final body = response['body'];
+
+      if (statusCode == 200) {
+        // Login berhasil, navigasi ke dashboard
+        Navigator.pushReplacementNamed(
+          context,
+          InvenTrackApp.homeRoute,
+        );
+      } else if (statusCode == 403) {
+        // Akun dinonaktifkan
+        setState(() {
+          _errorMessage = body['message'] ?? 'Akun Anda telah dinonaktifkan.';
+        });
+      } else if (statusCode == 422) {
+        // Kredensial salah atau validasi gagal
+        setState(() {
+          _errorMessage = body['message'] ?? 'Email atau password salah.';
+        });
+      } else {
+        setState(() {
+          _errorMessage = 'Terjadi kesalahan pada server. (status: $statusCode)';
+        });
+      }
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _errorMessage = 'Tidak dapat terhubung ke server.';
+      });
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,18 +120,67 @@ class LoginScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 28),
-                  const TextField(
-                    decoration: InputDecoration(
-                      labelText: 'Username',
+
+                  // Error banner — tampilan mirip Laravel
+                  if (_errorMessage != null) ...[
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 12),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFDEDED),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                          color: AppColors.error.withOpacity(0.15),
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.error_outline,
+                              color: AppColors.error, size: 20),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Text(
+                              _errorMessage!,
+                              style: const TextStyle(
+                                color: AppColors.error,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                  ],
+
+                  TextField(
+                    controller: _emailController,
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: const InputDecoration(
+                      labelText: 'Email / Username',
                       prefixIcon: Icon(Icons.person_outline),
                     ),
                   ),
                   const SizedBox(height: 14),
-                  const TextField(
-                    obscureText: true,
+                  TextField(
+                    controller: _passwordController,
+                    obscureText: _obscurePassword,
                     decoration: InputDecoration(
                       labelText: 'Password',
-                      prefixIcon: Icon(Icons.lock_outline),
+                      prefixIcon: const Icon(Icons.lock_outline),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _obscurePassword
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _obscurePassword = !_obscurePassword;
+                          });
+                        },
+                      ),
                     ),
                   ),
                   const SizedBox(height: 20),
@@ -64,14 +191,18 @@ class LoginScreen extends StatelessWidget {
                         backgroundColor: AppColors.primary,
                         foregroundColor: Colors.white,
                       ),
-                      onPressed: () {
-                        Navigator.pushReplacementNamed(
-                          context,
-                          InvenTrackApp.homeRoute,
-                        );
-                      },
-                      icon: const Icon(Icons.arrow_forward),
-                      label: const Text('Sign In to Dashboard'),
+                      onPressed: _isLoading ? null : _handleLogin,
+                      icon: _isLoading
+                          ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.white,
+                              ))
+                          : const Icon(Icons.arrow_forward),
+                      label: Text(
+                          _isLoading ? 'Loading...' : 'Sign In to Dashboard'),
                     ),
                   ),
                 ],

@@ -68,11 +68,7 @@ class GoodsReceiptScreen extends StatelessWidget {
               foregroundColor: Colors.white,
               minimumSize: const Size.fromHeight(48),
             ),
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Goods receipt submitted')),
-              );
-            },
+            onPressed: null,
             icon: const Icon(Icons.done_all),
             label: const Text('Submit Receipt'),
           ),
