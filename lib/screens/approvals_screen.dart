@@ -13,6 +13,7 @@ class ApprovalsScreen extends StatelessWidget {
       ('REQ-8829', 'Titanium Alloy Stock', r'$12,450'),
       ('REQ-8831', 'Electronic Sensors', r'$3,200'),
       ('REQ-8835', 'Packaging Supplies', r'$850'),
+      
     ];
 
     return ListView(
